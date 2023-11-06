@@ -1,1 +1,3 @@
-require'cmp'.register_source('flypy', require'cmp_flypy'.new())
+local source = require'cmp_flypy.init'.new()
+require'cmp'.register_source('flypy', source)
+

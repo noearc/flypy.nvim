@@ -1,4 +1,12 @@
   local source = {}
+  local item = require('cmp_flypy.item')
+
+  source.new = function()
+    local self = setmetatable({}, { __index = source })
+    self.commit_items = nil
+    self.insert_items = nil
+    return self
+  end
 
   ---Return whether this source is available in the current context or not (optional).
   ---@return boolean
@@ -19,23 +27,11 @@
     return 'utf-16'
   end
 
-  ---Return the keyword pattern for triggering completion (optional).
-  ---If this is ommited, nvim-cmp will use a default keyword pattern. See |cmp-config.completion.keyword_pattern|.
-  ---@return string
-  function source:get_keyword_pattern()
-    return [[\k\+]]
-  end
-
-  ---Return trigger characters for triggering completion (optional).
-  function source:get_trigger_characters()
-    return { '.' }
-  end
-
   ---Invoke completion (required).
   ---@param params cmp.SourceCompletionApiParams
   ---@param callback fun(response: lsp.CompletionResponse|nil)
   function source:complete(params, callback)
-    callback(require('item'))
+    callback(item)
   end
   ---Resolve completion item (optional). This is called right before the completion is about to be displayed.
   ---Useful for setting the text shown in the documentation window (`completion_item.documentation`).
@@ -52,5 +48,6 @@
     callback(completion_item)
   end
 
-  ---Register your source to nvim-cmp.
-  require('cmp').register_source('flypy', source)
+require('cmp').register_source('flypy', source)
+print(vim.inspect(source))
+return source
